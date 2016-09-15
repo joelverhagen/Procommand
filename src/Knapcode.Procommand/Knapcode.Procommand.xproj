@@ -6,11 +6,12 @@
   </PropertyGroup>
   <Import Project="$(VSToolsPath)\DotNet\Microsoft.DotNet.Props" Condition="'$(VSToolsPath)' != ''" />
   <PropertyGroup Label="Globals">
-    <ProjectGuid>bec5da9f-3e3d-48a3-8dff-d191ab1f815b</ProjectGuid>
-    <RootNamespace>Knapcode.NuGetTools.Build</RootNamespace>
+    <ProjectGuid>af3f7f82-1b93-4bb2-bdb7-0278ba94552e</ProjectGuid>
+    <RootNamespace>Knapcode.Procommand</RootNamespace>
     <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)'=='' ">.\obj</BaseIntermediateOutputPath>
     <OutputPath Condition="'$(OutputPath)'=='' ">.\bin\</OutputPath>
   </PropertyGroup>
+
   <PropertyGroup>
     <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
