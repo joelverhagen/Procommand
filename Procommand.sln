@@ -12,6 +12,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7E2820A3-7AF
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Knapcode.Procommand", "src\Knapcode.Procommand\Knapcode.Procommand.xproj", "{AF3F7F82-1B93-4BB2-BDB7-0278BA94552E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{704C1D60-7D8C-4D23-973B-AB1471CBA3EA}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Knapcode.Procommand.Test", "test\Knapcode.Procommand.Test\Knapcode.Procommand.Test.xproj", "{4EEED615-5FC3-409C-8DCD-DBC2F32043B3}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Knapcode.Procommand.TestCommand", "test\Knapcode.Procommand.TestCommand\Knapcode.Procommand.TestCommand.xproj", "{8BF44579-EE6F-4E80-A2D9-E93DF6312F69}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -22,11 +28,21 @@ Global
 		{AF3F7F82-1B93-4BB2-BDB7-0278BA94552E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF3F7F82-1B93-4BB2-BDB7-0278BA94552E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF3F7F82-1B93-4BB2-BDB7-0278BA94552E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EEED615-5FC3-409C-8DCD-DBC2F32043B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EEED615-5FC3-409C-8DCD-DBC2F32043B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EEED615-5FC3-409C-8DCD-DBC2F32043B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EEED615-5FC3-409C-8DCD-DBC2F32043B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BF44579-EE6F-4E80-A2D9-E93DF6312F69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BF44579-EE6F-4E80-A2D9-E93DF6312F69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BF44579-EE6F-4E80-A2D9-E93DF6312F69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BF44579-EE6F-4E80-A2D9-E93DF6312F69}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{AF3F7F82-1B93-4BB2-BDB7-0278BA94552E} = {7E2820A3-7AFB-4919-8E8F-5CE24F387D91}
+		{4EEED615-5FC3-409C-8DCD-DBC2F32043B3} = {704C1D60-7D8C-4D23-973B-AB1471CBA3EA}
+		{8BF44579-EE6F-4E80-A2D9-E93DF6312F69} = {704C1D60-7D8C-4D23-973B-AB1471CBA3EA}
 	EndGlobalSection
 EndGlobal
