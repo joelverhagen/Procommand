@@ -3,15 +3,17 @@
     "debugType": "portable"
   },
   "dependencies": {
-    "System.Diagnostics.Process": "4.1.0"
   },
   "frameworks": {
+    "net46": {},
     "netstandard1.3": {
       "dependencies": {
-        "NETStandard.Library": {
-          "version": "1.6.0",
-          "type": "platform"
-        }
+        "System.Collections.Concurrent": "4.0.12",
+        "System.Diagnostics.Process": "4.1.0",
+        "System.Linq": "4.1.0",
+        "System.IO.FileSystem": "4.0.1",
+        "System.Runtime": "4.1.0",
+        "System.Runtime.Extensions": "4.1.0"
       }
     }
   }
