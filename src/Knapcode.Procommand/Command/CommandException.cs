@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Knapcode.NuGetTools.Build
+namespace Knapcode.Procommand
 {
     public class CommandException : Exception
     {

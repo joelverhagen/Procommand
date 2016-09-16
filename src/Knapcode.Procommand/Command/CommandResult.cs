@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Knapcode.NuGetTools.Build
+namespace Knapcode.Procommand
 {
     public class CommandResult
     {

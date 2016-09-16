@@ -1,4 +1,4 @@
-﻿namespace Knapcode.NuGetTools.Build
+﻿namespace Knapcode.Procommand
 {
     public enum CommandStatus
     {

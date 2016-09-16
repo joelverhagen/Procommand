@@ -1,12 +1,18 @@
 {
   "buildOptions": {
-    "debugType": "portable",
-    "emitEntryPoint": true
+    "debugType": "portable"
   },
   "dependencies": {
-    "Microsoft.Extensions.CommandLineUtils": "1.0.0"
+    "System.Diagnostics.Process": "4.1.0"
   },
   "frameworks": {
-    "net46": {}
+    "netstandard1.3": {
+      "dependencies": {
+        "NETStandard.Library": {
+          "version": "1.6.0",
+          "type": "platform"
+        }
+      }
+    }
   }
 }

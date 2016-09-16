@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Linq;
 
-namespace Knapcode.NuGetTools.Build
+namespace Knapcode.Procommand
 {
     public class CommandRunner
     {
