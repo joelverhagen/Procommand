@@ -26,7 +26,11 @@ namespace Knapcode.Procommand
 
             foreach (var pair in command.Environment)
             {
+#if NET_FRAMEWORK
+                process.StartInfo.EnvironmentVariables[pair.Key] = pair.Value;
+#elif NET_CORE
                 process.StartInfo.Environment[pair.Key] = pair.Value;
+#endif
             }
 
             using (process)

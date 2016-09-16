@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
+using System.Threading;
 using Microsoft.Extensions.CommandLineUtils;
 using Newtonsoft.Json;
 
@@ -10,6 +13,15 @@ namespace Knapcode.Procommand.TestCommand
     {
         public static int Main(string[] args)
         {
+            if (args.Contains("--debug", StringComparer.OrdinalIgnoreCase))
+            {
+                args = args
+                    .Except(new[] { "--debug" }, StringComparer.OrdinalIgnoreCase)
+                    .ToArray();
+
+                Debugger.Launch();
+            }
+
             var application = new CommandLineApplication();
 
             application.Name = typeof(Program).GetTypeInfo().Assembly.GetName().Name;

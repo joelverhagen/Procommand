@@ -4,28 +4,30 @@
     "debugType": "portable"
   },
   "dependencies": {
-    "System.Runtime.Serialization.Primitives": "4.1.1",
-    "xunit": "2.1.0",
-    "dotnet-test-xunit": "1.0.0-rc2-350794-21",
-    "Knapcode.Procommand.TestCommand": {
-      "target": "project"
-    },
+    "dotnet-test-xunit": "1.0.0-rc2-*",
     "Knapcode.Procommand": {
       "target": "project"
     },
-    "Newtonsoft.Json": "9.0.1"
+    "Newtonsoft.Json": "9.0.1",
+    "xunit": "2.1.0"
   },
   "scripts": {
-    "postcompile": "dotnet publish %project:directory%/../Knapcode.Procommand.TestCommand"
+    "postcompile": "dotnet publish %project:directory%/../Knapcode.Procommand.TestCommand -f net451"
   },
   "testRunner": "xunit",
   "frameworks": {
+    "net451": {
+      "frameworkAssemblies": {
+        "System.Runtime": ""
+      }
+    },
     "netcoreapp1.0": {
       "dependencies": {
         "Microsoft.NETCore.App": {
           "type": "platform",
           "version": "1.0.0"
-        }
+        },
+        "System.Runtime.Serialization.Primitives": "4.1.1"
       },
       "imports": [
         "dotnet5.4",

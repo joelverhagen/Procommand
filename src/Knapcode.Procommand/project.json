@@ -5,7 +5,11 @@
   "dependencies": {
   },
   "frameworks": {
-    "net46": {},
+    "net45": {
+      "buildOptions": {
+        "define": [ "NET_FRAMEWORK" ]
+      }
+    },
     "netstandard1.3": {
       "dependencies": {
         "System.Collections.Concurrent": "4.0.12",
@@ -14,6 +18,9 @@
         "System.IO.FileSystem": "4.0.1",
         "System.Runtime": "4.1.0",
         "System.Runtime.Extensions": "4.1.0"
+      },
+      "buildOptions": {
+        "define": [ "NET_CORE" ]
       }
     }
   }
