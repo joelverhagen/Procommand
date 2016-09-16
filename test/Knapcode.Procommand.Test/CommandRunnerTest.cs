@@ -39,7 +39,7 @@ namespace Knapcode.Procommand.Test
             // Arrange
             using (var directory = TestDirectory.Create())
             {
-                var contents = "Foo" + Environment.NewLine + "Bar" + Environment.NewLine;
+                var contents = "Foo" + Environment.NewLine + "Bar";
                 var path = Path.Combine(directory, "file.txt");
                 File.WriteAllText(path, contents);
 
@@ -56,10 +56,32 @@ namespace Knapcode.Procommand.Test
                 Assert.Equal(CommandStatus.Exited, result.Status);
                 Assert.Equal(0, result.ExitCode);
 
-                Assert.Equal(contents, result.Output);
+                Assert.Equal(contents, result.Output.TrimEnd());
                 Assert.Empty(result.Error);
             }
-                
+        }
+
+        [Fact]
+        public void Run_InterceptsStderrAndStdout()
+        {
+            // Arrange
+            using (var directory = TestDirectory.Create())
+            {
+                var testCommandPath = GetTestCommandPath();
+                var command = new Command(testCommandPath, "output --stdout STDOUT --stderr STDERR");
+
+                var target = new CommandRunner();
+
+                // Act
+                var result = target.Run(command);
+
+                // Assert
+                Assert.Equal(CommandStatus.Exited, result.Status);
+                Assert.Equal(0, result.ExitCode);
+
+                Assert.Equal("STDOUT", result.Output.TrimEnd());
+                Assert.Equal("STDERR", result.Error.TrimEnd());
+            }
         }
 
         private string GetTestCommandPath()

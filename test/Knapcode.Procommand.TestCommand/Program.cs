@@ -56,6 +56,31 @@ namespace Knapcode.Procommand.TestCommand
                     });
                 });
 
+            application.Command(
+                "output",
+                command =>
+                {
+                    command.Description = "Write things to STDOUT or STDERR.";
+
+                    var stdout = command.Option("--stdout", "What to write to STDOUT.", CommandOptionType.SingleValue);
+                    var stderr = command.Option("--stderr", "What to write to STDERR.", CommandOptionType.SingleValue);
+
+                    command.OnExecute(() =>
+                    {
+                        if (stdout.HasValue())
+                        {
+                            Console.WriteLine(stdout.Value());
+                        }
+
+                        if (stderr.HasValue())
+                        {
+                            Console.Error.WriteLine(stderr.Value());
+                        }
+
+                        return 0;
+                    });
+                });
+
             application.OnExecute(() =>
             {
                 application.ShowHelp();
