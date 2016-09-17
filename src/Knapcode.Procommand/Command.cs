@@ -6,6 +6,15 @@ namespace Knapcode.Procommand
 {
     public class Command
     {
+        public Command(string fileName) : this(fileName, string.Empty)
+        {
+        }
+
+        public Command(string fileName, IEnumerable<string> arguments)
+            : this(fileName, ArgumentsBuilder.Build(arguments))
+        {
+        }
+
         public Command(string fileName, string arguments)
         {
             FileName = fileName;
@@ -13,10 +22,6 @@ namespace Knapcode.Procommand
             WorkingDirectory = Directory.GetCurrentDirectory();
             Environment = new Dictionary<string, string>();
             Timeout = TimeSpan.FromMinutes(1);
-        }
-
-        public Command(string fileName) : this(fileName, string.Empty)
-        {
         }
 
         public string WorkingDirectory { get; set; }

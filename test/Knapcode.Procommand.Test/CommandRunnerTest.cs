@@ -11,6 +11,28 @@ namespace Knapcode.Procommand.Test
     public class CommandRunnerTest
     {
         [Fact]
+        public void Constructor_EscapesArguments()
+        {
+            // Arrange
+            var testCommandPath = Utility.GetTestCommandPath();
+            var expected = new[] { "dump", "foo", "\"bar baz\"" };
+            var command = new Command(testCommandPath, expected);
+
+            var target = new CommandRunner();
+
+            // Act
+            var result = target.Run(command);
+
+            // Assert
+            Assert.Equal(CommandStatus.Exited, result.Status);
+            Assert.Equal(0, result.ExitCode);
+
+            var dump = JsonConvert.DeserializeObject<JObject>(result.Output);
+            var actual = dump["Arguments"].ToObject<string[]>();
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
         public void Run_AllowsEnvironmentVariablesToBeSet() 
         {
             // Arrange

@@ -94,6 +94,19 @@ namespace Knapcode.Procommand.Test
             Assert.Equal(string.Empty, actual);
         }
 
+        [Fact]
+        public void Build_CanBeCalledAsAStatic()
+        {
+            // Arrange
+            var input = new[] { "foo", "bar", "baz" };
+
+            // Act
+            var actual = ArgumentsBuilder.Build(input);
+
+            // Assert
+            Assert.Equal("foo bar baz", actual);
+        }
+
         [Theory]
         [MemberData(nameof(SingleParameters))]
         public void Build_EscapesMultipleParameters(string input, string escaped)

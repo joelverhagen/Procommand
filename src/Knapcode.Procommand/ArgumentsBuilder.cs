@@ -25,6 +25,12 @@ namespace Knapcode.Procommand
         
         public IList<string> Arguments { get; }
 
+        public static string Build(IEnumerable<string> arguments)
+        {
+            var builder = new ArgumentsBuilder(arguments);
+            return builder.Build();
+        }
+
         public string Build()
         {
             var stringBuilder = new StringBuilder();
