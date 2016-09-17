@@ -1,8 +1,16 @@
 {
-  "version": "0.2.0-*",
+  "version": "0.3.0-*",
   "buildOptions": {
     "debugType": "portable"
   },
+  "packOptions": {
+    "owners": [ "Joel Verhagen" ],
+    "licenseUrl": "https://raw.githubusercontent.com/joelverhagen/Procommand/master/LICENSE",
+    "tags": [ "process", "invoke", "command", "stdout", "stdin", "stderr", "output", "pipe", "shell" ],
+    "projectUrl": "https://github.com/joelverhagen/Procommand"
+  },
+  "authors": [ "Joel Verhagen" ],
+  "description": "A convenient .NET API for shelling out to other executables.",
   "dependencies": {},
   "frameworks": {
     "net45": {
