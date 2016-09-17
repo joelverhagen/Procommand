@@ -77,7 +77,7 @@ namespace Knapcode.Procommand
                     if (command.Input != null)
                     {
                         command.Input.CopyTo(process.StandardInput.BaseStream);
-                        process.StandardInput.Close();
+                        process.StandardInput.Dispose();
                     }
 
                     var exited = process.WaitForExit((int)command.Timeout.TotalMilliseconds);
