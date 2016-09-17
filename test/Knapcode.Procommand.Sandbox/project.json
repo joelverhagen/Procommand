@@ -1,0 +1,19 @@
+﻿{
+  "version": "1.0.0-*",
+  "buildOptions": {
+    "emitEntryPoint": true
+  },
+
+  "dependencies": {
+    "Knapcode.Procommand": {
+      "target": "project"
+    },
+    "Knapcode.Procommand.TestCommand": {
+      "target": "project"
+    }
+  },
+
+  "frameworks": {
+    "net451": {}
+  }
+}

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 
 namespace Knapcode.Procommand
@@ -9,11 +10,21 @@ namespace Knapcode.Procommand
     {
         public CommandResult Run(Command command)
         {
+            if (command == null)
+            {
+                throw new ArgumentNullException(nameof(command));
+            }
+
+            if (command.FileName == null)
+            {
+                throw new ArgumentException("The FileName on the command must not be null.");
+            }
+
             var process = new Process
             {
                 StartInfo =
                 {
-                    WorkingDirectory = command.WorkingDirectory,
+                    WorkingDirectory = command.WorkingDirectory ?? Directory.GetCurrentDirectory(),
                     FileName = command.FileName,
                     Arguments = command.Arguments,
                     RedirectStandardInput = true,
@@ -25,13 +36,16 @@ namespace Knapcode.Procommand
                 EnableRaisingEvents = true
             };
 
-            foreach (var pair in command.Environment)
+            if (command.Environment != null)
             {
+                foreach (var pair in command.Environment)
+                {
 #if NET_FRAMEWORK
-                process.StartInfo.EnvironmentVariables[pair.Key] = pair.Value;
+                    process.StartInfo.EnvironmentVariables[pair.Key] = pair.Value;
 #elif NET_CORE
-                process.StartInfo.Environment[pair.Key] = pair.Value;
+                    process.StartInfo.Environment[pair.Key] = pair.Value;
 #endif
+                }
             }
 
             using (process)

@@ -15,7 +15,9 @@
         "System.Collections.Concurrent": "4.0.12",
         "System.Diagnostics.Process": "4.1.0",
         "System.Linq": "4.1.0",
-        "System.IO.FileSystem": "4.0.1"
+        "System.IO.FileSystem": "4.0.1",
+        "System.Runtime.Extensions": "4.1.0",
+        "System.Text.RegularExpressions": "4.1.0"
       },
       "buildOptions": {
         "define": [ "NET_CORE" ]

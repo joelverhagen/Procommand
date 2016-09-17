@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Text;
 using Knapcode.Procommand.Test.TestSupport;
 using Newtonsoft.Json;
@@ -15,7 +14,7 @@ namespace Knapcode.Procommand.Test
         public void Run_AllowsEnvironmentVariablesToBeSet() 
         {
             // Arrange
-            var testCommandPath = GetTestCommandPath();
+            var testCommandPath = Utility.GetTestCommandPath();
             var command = new Command(testCommandPath, "dump");
             var environmentKey = "ProcommandTest";
             command.Environment[environmentKey] = Guid.NewGuid().ToString();
@@ -44,7 +43,7 @@ namespace Knapcode.Procommand.Test
                 var path = Path.Combine(directory, "file.txt");
                 File.WriteAllText(path, contents);
 
-                var testCommandPath = GetTestCommandPath();
+                var testCommandPath = Utility.GetTestCommandPath();
                 var command = new Command(testCommandPath, "read-file file.txt");
                 command.WorkingDirectory = directory;
 
@@ -66,7 +65,7 @@ namespace Knapcode.Procommand.Test
         public void Run_InterceptsStderrAndStdout()
         {
             // Arrange
-            var testCommandPath = GetTestCommandPath();
+            var testCommandPath = Utility.GetTestCommandPath();
             var command = new Command(testCommandPath, "output o:STDOUT e:STDERR");
 
             var target = new CommandRunner();
@@ -86,7 +85,7 @@ namespace Knapcode.Procommand.Test
         public void Run_InterceptsStdoutAndStderrInCorrectOrder()
         {
             // Arrange
-            var testCommandPath = GetTestCommandPath();
+            var testCommandPath = Utility.GetTestCommandPath();
             var command = new Command(testCommandPath, "output o:o1 e:e1 e:e2 o:o2 e:e3 o:o3 o:o4");
 
             var target = new CommandRunner();
@@ -114,7 +113,7 @@ namespace Knapcode.Procommand.Test
         public void Run_TimesOutCommand()
         {
             // Arrange
-            var testCommandPath = GetTestCommandPath();
+            var testCommandPath = Utility.GetTestCommandPath();
 
             var command = new Command(testCommandPath, "wait 100");
             command.Timeout = TimeSpan.FromMilliseconds(99);
@@ -155,7 +154,7 @@ namespace Knapcode.Procommand.Test
         public void Run_SendsInputToStdin()
         {
             // Arrange
-            var testCommandPath = GetTestCommandPath();
+            var testCommandPath = Utility.GetTestCommandPath();
             var command = new Command(testCommandPath, "echo");
             var expected = "foo" + Environment.NewLine + "bar";
             command.Input = new MemoryStream(Encoding.ASCII.GetBytes(expected));
@@ -176,7 +175,7 @@ namespace Knapcode.Procommand.Test
         public void Run_StdinCanBeUsedForAnInteractiveConsoleApplication()
         {
             // Arrange
-            var testCommandPath = GetTestCommandPath();
+            var testCommandPath = Utility.GetTestCommandPath();
             var command = new Command(testCommandPath, "interactive");
             var input = "N" + Environment.NewLine + "Joel" + Environment.NewLine + "fantastic";
             command.Input = new MemoryStream(Encoding.ASCII.GetBytes(input));
@@ -206,7 +205,7 @@ namespace Knapcode.Procommand.Test
         public void Run_ReturnsPositiveExitCode(int expected)
         {
             // Arrange
-            var testCommandPath = GetTestCommandPath();
+            var testCommandPath = Utility.GetTestCommandPath();
             var command = new Command(testCommandPath, $"exit-code {expected}");
 
             var target = new CommandRunner();
@@ -217,33 +216,6 @@ namespace Knapcode.Procommand.Test
             // Assert
             Assert.Equal(CommandStatus.Exited, result.Status);
             Assert.Equal(expected, result.ExitCode);
-        }
-
-        private string GetTestCommandPath()
-        {
-            var repositoryRoot = GetRepositoryRoot();
-
-            return Path.Combine(
-                repositoryRoot,
-                "test",
-                "Knapcode.Procommand.TestCommand",
-                "bin",
-                "Debug",
-                "net451",
-                "win7-x64",
-                "Knapcode.Procommand.TestCommand.exe");
-        }
-
-        private static string GetRepositoryRoot()
-        {
-            var current = Directory.GetCurrentDirectory();
-            while (current != null &&
-                   !Directory.GetFiles(current).Any(x => Path.GetFileName(x) == "Procommand.sln"))
-            {
-                current = Path.GetDirectoryName(current);
-            }
-
-            return current;
         }
     }
 }

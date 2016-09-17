@@ -11,6 +11,11 @@ namespace Knapcode.Procommand.TestCommand
 {
     public class Program
     {
+        public static string GetAbsolutePath()
+        {
+            return typeof(Program).GetTypeInfo().Assembly.Location;
+        }
+
         public static int Main(string[] args)
         {
             if (args.Contains("--debug", StringComparer.OrdinalIgnoreCase))
@@ -46,7 +51,8 @@ namespace Knapcode.Procommand.TestCommand
 
                         return 0;
                     });
-                });
+                },
+                throwOnUnexpectedArg: false);
 
             application.Command(
                 "echo",
