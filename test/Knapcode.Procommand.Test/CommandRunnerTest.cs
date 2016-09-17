@@ -116,8 +116,8 @@ namespace Knapcode.Procommand.Test
             // Arrange
             var testCommandPath = GetTestCommandPath();
 
-            var command = new Command(testCommandPath, "wait 500");
-            command.Timeout = TimeSpan.FromMilliseconds(499);
+            var command = new Command(testCommandPath, "wait 100");
+            command.Timeout = TimeSpan.FromMilliseconds(99);
 
             var target = new CommandRunner();
 
@@ -130,7 +130,7 @@ namespace Knapcode.Procommand.Test
             // Assert
             Assert.Equal(CommandStatus.Timeout, result.Status);
             Assert.Equal(-1, result.ExitCode);
-            Assert.Equal("About to sleep 500 milliseconds.", result.Output.TrimEnd());
+            Assert.Equal("About to sleep 100 milliseconds.", result.Output.TrimEnd());
         }
 
         [Fact]
