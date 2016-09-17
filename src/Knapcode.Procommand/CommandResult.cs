@@ -9,7 +9,7 @@ namespace Knapcode.Procommand
         public Command Command { get; set; }
         public CommandStatus Status { get; set; }
         public Exception Exception { get; set; }
-        public IEnumerable<CommandOutputLine> Lines { get; set; }
+        public IList<CommandOutputLine> Lines { get; set; }
         public int ExitCode { get; set; }
 
         public void EnsureSuccess()
@@ -43,7 +43,7 @@ namespace Knapcode.Procommand
                 }
 
                 return Lines
-                    .Where(x => x.Type == CommandOutputLineType.StandardOutput)
+                    .Where(x => x.Type == CommandOutputLineType.Out)
                     .Select(x => x.Value);
             }
         }
@@ -58,7 +58,7 @@ namespace Knapcode.Procommand
                 }
 
                 return Lines
-                    .Where(x => x.Type == CommandOutputLineType.StandardError)
+                    .Where(x => x.Type == CommandOutputLineType.Err)
                     .Select(x => x.Value);
             }
         }

@@ -24,6 +24,7 @@ namespace Knapcode.Procommand
         public string Arguments { get; set; }
         public TimeSpan Timeout { get; set; }
         public IDictionary<string, string> Environment { get; set; }
+        public Stream Input { get; set; }
 
         public string GetDisplayString()
         {

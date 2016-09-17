@@ -2,7 +2,7 @@
 {
     public enum CommandOutputLineType
     {
-        StandardOutput,
-        StandardError
+        Out,
+        Err
     }
 }

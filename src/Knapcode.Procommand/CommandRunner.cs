@@ -16,6 +16,7 @@ namespace Knapcode.Procommand
                     WorkingDirectory = command.WorkingDirectory,
                     FileName = command.FileName,
                     Arguments = command.Arguments,
+                    RedirectStandardInput = true,
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
                     UseShellExecute = false,
@@ -40,14 +41,14 @@ namespace Knapcode.Procommand
                 process.OutputDataReceived += (sender, e) =>
                 {
                     queue.Enqueue(new CommandOutputLine(
-                        CommandOutputLineType.StandardOutput,
+                        CommandOutputLineType.Out,
                         e.Data));
                 };
 
                 process.ErrorDataReceived += (sender, e) =>
                 {
                     queue.Enqueue(new CommandOutputLine(
-                        CommandOutputLineType.StandardError,
+                        CommandOutputLineType.Err,
                         e.Data));
                 };
 
@@ -72,6 +73,12 @@ namespace Knapcode.Procommand
                 {
                     process.BeginOutputReadLine();
                     process.BeginErrorReadLine();
+
+                    if (command.Input != null)
+                    {
+                        command.Input.CopyTo(process.StandardInput.BaseStream);
+                        process.StandardInput.Close();
+                    }
 
                     var exited = process.WaitForExit((int)command.Timeout.TotalMilliseconds);
 
