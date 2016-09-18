@@ -107,13 +107,38 @@ namespace Knapcode.Procommand.Test
             Assert.Equal("foo bar baz", actual);
         }
 
+        [Fact]
+        public void Build_EscapesToStorageParameters()
+        {
+            // Arrange
+            var expectedArguments = new[]
+            {
+                "dump",
+                "-s", "UseDevelopmentStorage=true",
+                "-c", "testcontainer",
+                "-f", "foo/bar/{0}.txt",
+                "-d", "false",
+                "-l", "false"
+            };
+
+            // Act & Arrange
+            VerifyArgumentsRoundTrip(expectedArguments);
+        }
+
         [Theory]
         [MemberData(nameof(SingleParameters))]
         public void Build_EscapesMultipleParameters(string input, string escaped)
         {
             // Arrange
-            var testCommandPath = Utility.GetTestCommandPath();
             var expectedArguments = new[] { "dump", "foo", input, "bar", input, "baz" };
+
+            // Act & Arrange
+            VerifyArgumentsRoundTrip(expectedArguments);
+        }
+
+        private static void VerifyArgumentsRoundTrip(string[] expectedArguments)
+        {
+            var testCommandPath = Utility.GetTestCommandPath();
             var target = new ArgumentsBuilder(expectedArguments);
             var runner = new CommandRunner();
 

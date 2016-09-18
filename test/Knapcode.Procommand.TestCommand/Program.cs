@@ -20,11 +20,11 @@ namespace Knapcode.Procommand.TestCommand
         {
             if (args.Contains("--debug", StringComparer.OrdinalIgnoreCase))
             {
-                args = args
-                    .Except(new[] { "--debug" }, StringComparer.OrdinalIgnoreCase)
-                    .ToArray();
-
                 Debugger.Launch();
+
+                args = args
+                    .Where(x => !StringComparer.OrdinalIgnoreCase.Equals(x, "--debug"))
+                    .ToArray();
             }
 
             var application = new CommandLineApplication();
