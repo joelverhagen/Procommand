@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Knapcode.Procommand
 {
@@ -50,22 +51,7 @@ namespace Knapcode.Procommand
 
             using (process)
             {
-                var queue = new ConcurrentQueue<CommandOutputLine>();
-
-                process.OutputDataReceived += (sender, e) =>
-                {
-                    queue.Enqueue(new CommandOutputLine(
-                        CommandOutputLineType.Out,
-                        e.Data));
-                };
-
-                process.ErrorDataReceived += (sender, e) =>
-                {
-                    queue.Enqueue(new CommandOutputLine(
-                        CommandOutputLineType.Err,
-                        e.Data));
-                };
-
+                var lines = new ConcurrentQueue<CommandOutputLine>();                
                 var status = CommandStatus.Exited;
                 Exception exception = null;
                 var exitCode = -1;
@@ -85,9 +71,9 @@ namespace Knapcode.Procommand
 
                 if (started)
                 {
-                    process.BeginOutputReadLine();
-                    process.BeginErrorReadLine();
-
+                    var outTask = ConsumeStreamReaderAsync(lines, process.StandardOutput, CommandOutputLineType.Out);
+                    var errTask = ConsumeStreamReaderAsync(lines, process.StandardError, CommandOutputLineType.Err);
+                    
                     if (command.Input != null)
                     {
                         command.Input.CopyTo(process.StandardInput.BaseStream);
@@ -112,6 +98,7 @@ namespace Knapcode.Procommand
                     }
                     else
                     {
+                        Task.WaitAll(outTask, errTask);
                         exitCode = process.ExitCode;
                     }
                 }
@@ -121,9 +108,23 @@ namespace Knapcode.Procommand
                     Command = command,
                     Status = status,
                     Exception = exception,
-                    Lines = queue.ToList(),
+                    Lines = lines.ToList(),
                     ExitCode = exitCode
                 };
+            }
+        }
+
+        private async Task ConsumeStreamReaderAsync(
+            ConcurrentQueue<CommandOutputLine> lines,
+            StreamReader reader,
+            CommandOutputLineType type)
+        {
+            await Task.Yield();
+
+            string line;
+            while ((line = await reader.ReadLineAsync()) != null)
+            {
+                lines.Enqueue(new CommandOutputLine(type, line));
             }
         }
     }

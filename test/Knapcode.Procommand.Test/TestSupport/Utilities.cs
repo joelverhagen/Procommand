@@ -1,10 +1,33 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace Knapcode.Procommand.Test.TestSupport
 {
     public static class Utility
     {
+        public static Command GetEchoCommand(string echo)
+        {
+            string fileName;
+            var arguments = new List<string>();
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                fileName = "cmd.exe";
+                arguments.Add("/c");
+                arguments.Add("echo");
+                arguments.Add(echo);
+            }
+            else
+            {
+                fileName = "echo";
+                arguments.Add(echo);
+            }
+
+            var command = new Command(fileName, arguments);
+            return command;
+        }
+
         public static string GetTestCommandPath()
         {
             var repositoryRoot = GetRepositoryRoot();

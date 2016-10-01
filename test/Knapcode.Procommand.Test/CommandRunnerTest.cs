@@ -1,6 +1,9 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading.Tasks;
 using Knapcode.Procommand.Test.TestSupport;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -30,6 +33,68 @@ namespace Knapcode.Procommand.Test
             var dump = JsonConvert.DeserializeObject<JObject>(result.Output);
             var actual = dump["Arguments"].ToObject<string[]>();
             Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(true, -1)]
+        [InlineData(true, int.MaxValue)]
+        [InlineData(true, 60 * 1000)]
+        [InlineData(false, -1)]
+        [InlineData(false, int.MaxValue)]
+        [InlineData(false, 60 * 1000)]
+        public async Task Run_StressTest(bool output, int timeoutMilliseconds)
+        {
+            // Arrange
+            var taskCount = 8;
+            var repititions = 200;
+
+            // Act & Assert
+            var tasks = Enumerable
+                .Range(1, taskCount)
+                .Select(x => Task.Run(() =>
+                {
+                    for (var i = 0; i < repititions; i++)
+                    {
+                        // Arrange
+                        var expected = Guid.NewGuid().ToString();
+                        var testCommandPath = Utility.GetTestCommandPath();
+                        var arguments = new[] { "output", $"{(output ? 'o' : 'e')}:{expected}" };
+
+                        var command = new Command(testCommandPath, arguments);
+                        command.Timeout = TimeSpan.FromMilliseconds(timeoutMilliseconds);
+
+                        var target = new CommandRunner();
+
+                        // Act
+                        var result = target.Run(command);
+
+                        // Assert
+                        Assert.Equal(CommandStatus.Exited, result.Status);
+                        Assert.Equal(0, result.ExitCode);
+                        Assert.Contains(expected, output ? result.Output : result.Error);
+                    }
+                }))
+                .ToArray();
+            await Task.WhenAll(tasks);
+        }
+
+        [Fact]
+        public void Run_CanUseSystemEcho()
+        {
+            // Arrange
+            var expected = "echo me this!";
+            var command = Utility.GetEchoCommand(expected);
+
+            var target = new CommandRunner();
+
+            // Act
+            var result = target.Run(command);
+
+            // Assert
+            Assert.Equal(CommandStatus.Exited, result.Status);
+            Assert.Equal(0, result.ExitCode);
+
+            Assert.Contains(expected, result.Output);
         }
 
         [Fact]
@@ -119,16 +184,18 @@ namespace Knapcode.Procommand.Test
             Assert.Equal(CommandStatus.Exited, result.Status);
             Assert.Equal(0, result.ExitCode);
 
-            Assert.Equal(9, result.Lines.Count);
-            Assert.Equal(new CommandOutputLine(CommandOutputLineType.Out, "o1"), result.Lines[0]);
-            Assert.Equal(new CommandOutputLine(CommandOutputLineType.Err, "e1"), result.Lines[1]);
-            Assert.Equal(new CommandOutputLine(CommandOutputLineType.Err, "e2"), result.Lines[2]);
-            Assert.Equal(new CommandOutputLine(CommandOutputLineType.Out, "o2"), result.Lines[3]);
-            Assert.Equal(new CommandOutputLine(CommandOutputLineType.Err, "e3"), result.Lines[4]);
-            Assert.Equal(new CommandOutputLine(CommandOutputLineType.Out, "o3"), result.Lines[5]);
-            Assert.Equal(new CommandOutputLine(CommandOutputLineType.Out, "o4"), result.Lines[6]);
-            Assert.Null(result.Lines[7].Value);
-            Assert.Null(result.Lines[8].Value);
+            Assert.Equal(7, result.Lines.Count);
+
+            // Sort by type. Since these lines are coming from different streams, it's possible we read them out of
+            // order.
+            var lines = result.Lines.OrderBy(x => x?.Type).ToList();
+            Assert.Equal(new CommandOutputLine(CommandOutputLineType.Out, "o1"), lines[0]);
+            Assert.Equal(new CommandOutputLine(CommandOutputLineType.Out, "o2"), lines[1]);
+            Assert.Equal(new CommandOutputLine(CommandOutputLineType.Out, "o3"), lines[2]);
+            Assert.Equal(new CommandOutputLine(CommandOutputLineType.Out, "o4"), lines[3]);
+            Assert.Equal(new CommandOutputLine(CommandOutputLineType.Err, "e1"), lines[4]);
+            Assert.Equal(new CommandOutputLine(CommandOutputLineType.Err, "e2"), lines[5]);
+            Assert.Equal(new CommandOutputLine(CommandOutputLineType.Err, "e3"), lines[6]);
         }
 
         [Fact]
@@ -177,7 +244,7 @@ namespace Knapcode.Procommand.Test
         {
             // Arrange
             var testCommandPath = Utility.GetTestCommandPath();
-            var command = new Command(testCommandPath, "echo");
+            var command = new Command(testCommandPath, "input");
             var expected = "foo" + Environment.NewLine + "bar";
             command.Input = new MemoryStream(Encoding.ASCII.GetBytes(expected));
 

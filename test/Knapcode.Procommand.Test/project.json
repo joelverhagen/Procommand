@@ -9,6 +9,7 @@
       "target": "project"
     },
     "Newtonsoft.Json": "9.0.1",
+    "System.Runtime.InteropServices.RuntimeInformation": "4.0.0",
     "xunit": "2.1.0"
   },
   "scripts": {
@@ -17,11 +18,17 @@
   "testRunner": "xunit",
   "frameworks": {
     "net451": {
+      "buildOptions": {
+        "define": [ "NET_FRAMEWORK" ]
+      },
       "frameworkAssemblies": {
         "System.Runtime": ""
       }
     },
     "netcoreapp1.0": {
+      "buildOptions": {
+        "define": [ "NET_CORE" ]
+      },
       "dependencies": {
         "Microsoft.NETCore.App": {
           "type": "platform",

@@ -55,23 +55,6 @@ namespace Knapcode.Procommand.TestCommand
                 throwOnUnexpectedArg: false);
 
             application.Command(
-                "echo",
-                command =>
-                {
-                    command.Description = "Write STDIN to STDOUT.";
-
-                    command.OnExecute(() =>
-                    {
-                        var stdin = Console.OpenStandardInput();
-                        var stdout = Console.OpenStandardOutput();
-
-                        stdin.CopyTo(stdout);
-
-                        return 0;
-                    });
-                });
-
-            application.Command(
                 "exit-code",
                 command =>
                 {
@@ -84,6 +67,23 @@ namespace Knapcode.Procommand.TestCommand
                         var value = int.Parse(codeArgument.Value);
 
                         return value;
+                    });
+                });
+
+            application.Command(
+                "input",
+                command =>
+                {
+                    command.Description = "Write STDIN to STDOUT.";
+
+                    command.OnExecute(() =>
+                    {
+                        var stdin = Console.OpenStandardInput();
+                        var stdout = Console.OpenStandardOutput();
+
+                        stdin.CopyTo(stdout);
+
+                        return 0;
                     });
                 });
 
